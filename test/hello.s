@@ -11,70 +11,55 @@ Main:
 	move.w  #(DMA_B_clr|DMA_B_everything),(HW_DMA_control,a6)
 	jsr     Initialize_printer
 
-	lea     (puzzle_input),a0
-	lea     (part1_matrix),a3
-	lea     (part2_matrix),a4
-	clr.l   d3
-	clr.l   d4
-	
-.loop:
-	clr.l   d0
-	clr.l   d1
-	clr.w   d2
-	move.b  0(a0),d0
-	beq     .done
-	move.b  2(a0),d1
-	add.l   #4,a0
+	lea     (my_message),a0
 
-	sub.b   #'A',d0
-	move.b  d0,d2
-	add.b   d2,d2
-	add.b   d0,d2
-	sub.b   #'X',d1
-	add.b   d1,d2
-	
-	move.b  (a3,d2.w),d0
-	and.l   #$ff,d0
+	moveq.l  #0,d4  ;; third greatest
+	moveq.l  #0,d5  ;; second greatest
+	moveq.l  #0,d6  ;; greatest
+	moveq.l  #0,d3
+.new_number:
+	jsr     Read_integer
+	bvs     .end_elf
 	add.l   d0,d3
+	addq.l  #1,a0
+	bra     .new_number
 
-	move.b  (a4,d2.w),d0
-	and.l   #$ff,d0
-	add.l   d0,d4
+.end_elf:
+	m_exlt  d3,d4
+	bge     .swap_done
+	m_exlt  d4,d5
+	bge     .swap_done
+	m_exlt  d5,d6
+.swap_done:
+	tst.b   (a0)+
+	beq     .done
+	move.l  #0,d3
+	bra     .new_number
 
-	bra     .loop
 .done:
-
 	lea     (part1_prompt),a0
 	jsr     Put_string
-	move.l  d3,d0
+	move.l  d6,d0
 	jsr     Put_integer
 	lea     (newline),a0
 	jsr     Put_string
 
 	lea     (part2_prompt),a0
 	jsr     Put_string
-	move.l  d4,d0
+	add.l   d4,d5
+	add.l   d5,d6
+	move.l  d6,d0
 	jsr     Put_integer
 	lea     (newline),a0
 	jsr     Put_string
+
 	m_pause
 
 	movem.l (sp)+,d0-a6
 	rts
 
 	section DATA,DATA_C
-part1_matrix:
-	dc.b    3+1,6+2,0+3
-	dc.b    0+1,3+2,6+3
-	dc.b    6+1,0+2,3+3
-
-part2_matrix:
-	dc.b    0+3,3+1,6+2
-	dc.b    0+1,3+2,6+3
-	dc.b    0+2,3+3,6+1
-	even
-
-puzzle_input:
+my_message:
 	incbin  "input.txt"
 	dc.b    0
 newline:
@@ -84,4 +69,3 @@ part1_prompt:
 	dc.b    "Part 1:\t",0
 part2_prompt:
 	dc.b    "Part 2:\t",0
-	even
