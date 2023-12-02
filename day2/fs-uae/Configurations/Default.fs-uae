@@ -1,0 +1,8 @@
+[config]
+amiga-model     = A500
+zoom            = 640x400
+gfx_linemode    = scanlines2p2
+line_doubling   = 1
+low_resolution  = 0
+hard_drive_0    = hd0
+joystick_port_1 = none
