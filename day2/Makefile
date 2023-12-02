@@ -13,7 +13,7 @@ run: ./hd0/copper
 		-mrel       \
 		-Bstatic
 
-out.bin: hello.s include/baremetal_cli.i include/numerics.i include/font.i
+out.bin: main.s include/baremetal_cli.i include/numerics.i include/font.i
 	vasmm68k_mot $< \
 		-o $@       \
 		-Fhunk      \

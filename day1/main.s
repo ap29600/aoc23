@@ -1,8 +1,8 @@
 ; syntax M68k
 
-	include "../include/baremetal_cli.i"
-	include "../include/numerics.i"
-	include "../include/font.i"
+	include "include/baremetal_cli.i"
+	include "include/numerics.i"
+	include "include/font.i"
 
 	section CODE,CODE_C
 
