@@ -1,0 +1,6 @@
+[config]
+amiga-model     = A1200
+zoom            = 640x400
+jit_compiler    = 1
+hard_drive_0    = hd0
+joystick_port_1 = none
